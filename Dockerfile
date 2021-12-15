@@ -2,14 +2,13 @@ FROM aiidalab/aiidalab-docker-stack:21.10.1
 
 USER root
 
-
 # Install Python packages needed for AiiDAlab and populate reentry cache for root (https://pypi.python.org/pypi/reentry/).
-#COPY requirements.txt .
-#RUN pip install --upgrade pip
-#RUN pip install -r requirements.txt
-#RUN reentry scan
+COPY requirements.txt .
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
+RUN reentry scan
 
-# TODO: Install dev version of cclib to be able
+# Install dev version of cclib to be able
 # to parse TDDFT from ORCA-5.0
 RUN git clone https://github.com/cclib/cclib /opt/cclib
 RUN cd /opt/cclib/ && pip install .
