@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """Convenience script wrapper to start and stop AiiDAlab via docker-compose.
 
 Authors:
@@ -13,10 +13,11 @@ from time import sleep
 
 import click
 
+CONTAINER_NAME = 'aiidalab-ispg'
 
 def _service_is_up(docker_compose, service):
     aiidalab_container_id = (
-        docker_compose(["ps", "-q", "aiidalab"], check=True, capture_output=True)
+        docker_compose(["ps", "-q", CONTAINER_NAME], check=True, capture_output=True)
         .stdout.decode()
         .strip()
     )
@@ -49,8 +50,6 @@ def cli():
 @click.option(
     "--orca-dir",
     type=click.Path(),
-    # TODO: Better default
-    default=Path.home(),
     help="Specify a path to a directory with ORCA installation on a host system that is to be mounted.",
     show_default=True,
 )
@@ -67,11 +66,12 @@ def cli():
 @click.option(
     "--restart", is_flag=True, help="Restart AiiDAlab in case that it is already up."
 )
-def up(home_dir, port, jupyter_token, restart):
+def up(home_dir, orca_dir, port, jupyter_token, restart):
     """Start AiiDAlab on this host."""
     jupyter_token = token_hex(32) if jupyter_token is None else jupyter_token
     env = {
         "AIIDALAB_HOME": str(home_dir),
+        "ORCA_HOME": str(orca_dir),
         "AIIDALAB_PORT": str(port),
         "JUPYTER_TOKEN": str(jupyter_token),
         "PATH": os.environ["PATH"],
@@ -81,18 +81,18 @@ def up(home_dir, port, jupyter_token, restart):
         return run(["docker-compose", *args], env=env, **kwargs)
 
     # Check if server is already started.
-    if not restart and _service_is_up(_docker_compose, "aiidalab"):
+    if not restart and _service_is_up(_docker_compose, CONTAINER_NAME):
         click.echo("Service is already running. Use the `--restart` option to restart.")
         return
 
     click.echo("Starting AiiDAlab...")
-    _docker_compose(["up", "--detach", "--build"], check=True, capture_output=True)
+    _docker_compose(["up", "--detach", "--build"], check=True, capture_output=False)
 
     # A short sleep is necessary as the following command might fail if
     # executed immediately after the previous command
     sleep(0.5)
 
-    _docker_compose(["exec", "aiidalab", "wait-for-services"], check=True)
+    _docker_compose(["exec", CONTAINER_NAME, "wait-for-services"], check=True)
 
     click.secho("Container started successfully.", fg="green")
     click.secho("Open this link in the browser to enter AiiDAlab:", fg="green")

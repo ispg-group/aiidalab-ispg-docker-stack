@@ -1,4 +1,4 @@
-FROM aiidalab/aiidalab-docker-stack:21.10.1
+FROM aiidalab/aiidalab-docker-stack:develop
 
 USER root
 
@@ -21,7 +21,7 @@ RUN git clone https://github.com/pzarabadip/aiida-orca /opt/aiida-orca
 RUN cd /opt/aiida-orca/ && pip install -e .
 
 # Prepare user's folders for AiiDAlab launch.
-COPY opt/setup_optional_things.sh /opt/
-COPY my_init.d/setup_optional_things.sh /etc/my_init.d/90_setup_optional_things.sh
+COPY opt/setup_ispg_things.sh /opt/
+COPY my_init.d/setup_ispg_things.sh /etc/my_init.d/90_setup_ispg_things.sh
 
 CMD ["/sbin/my_my_init"]

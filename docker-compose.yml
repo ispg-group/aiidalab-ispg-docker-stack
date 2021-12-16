@@ -1,6 +1,6 @@
 version: "3.8"
 services:
-  aiidalab:
+  aiidalab-ispg:
     build: .
     ports:
       - ${AIIDALAB_PORT}:8888
@@ -8,8 +8,9 @@ services:
       - >
         AIIDALAB_DEFAULT_APPS=
         aiidalab-widgets-base
-        quantum-espresso
+        # Uncomment this once the repo is public
+        # git@github.com/danielhollas/aiidalab-ispg
       - JUPYTER_TOKEN
     volumes:
-      - ~/aiidalab:/home/aiida
-      - ~/orca:/opt/orca
+      - ${AIIDALAB_HOME}:/home/aiida
+      - ${ORCA_HOME}:/opt/orca
