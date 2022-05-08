@@ -1,1 +1,2 @@
 aiida-orca>=0.5
+xtb-python>=20.0
