@@ -8,7 +8,11 @@ WORKDIR /opt/
 RUN conda install --yes -c conda-forge xtb-python
 
 # Install and configure SLURM
-RUN apt-get update && apt-get install --yes slurm-wlm
+RUN apt-get update && apt-get install --yes slurm-wlm \
+  && rm -rf /var/lib/apt/lists/*
+# Not sure if this is needed
+RUN apt-get autoremove && apt-get autoclean && apt-get clean
+
 COPY opt/slurm.conf /etc/slurm-llnl/slurm.conf
 RUN mkdir /run/munge
 
