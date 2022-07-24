@@ -1,4 +1,4 @@
-FROM aiidalab/aiidalab-docker-stack:develop
+FROM aiidalab/aiidalab-docker-stack:latest
 LABEL maintainer="Daniel Hollas <daniel.hollas@bristol.ac.uk>"
 
 USER root
@@ -12,15 +12,23 @@ RUN apt-get update && apt-get install --yes slurm-wlm
 COPY opt/slurm.conf /etc/slurm-llnl/slurm.conf
 RUN mkdir /run/munge
 
+# Copy scripts to start SLURM daemons
+COPY service/slurm /etc/service/slurm/run
+
+# In case we need the latest aiidalab
+# This might conflict with the AiiDAlab docker image
+# so possibly not a good idea
+#RUN pip install --upgrade aiidalab
+
 # Prepare user's folders for AiiDAlab launch.
-COPY opt/setup_ispg_things.sh /opt/
+COPY opt/setup-ispg-things.sh /opt/
 
 # NOTE: This script sets up the slurm computer in AiiDA DB
 # so it needs to run before 80_prepare-aiidalab.sh,
-# which installs the aiidalab-ispg, which installs the orca code nodes.
-COPY my_init.d/setup_ispg_things.sh /etc/my_init.d/79_setup_ispg_things.sh
+# which installs the aiidalab-ispg, which in turn installs the orca code nodes.
+COPY my_init.d/setup-ispg-things.sh /etc/my_init.d/79_setup-ispg-things.sh
 
 # Not sure why we need this here while it is not needed in aiidalab-docker-stack
-RUN chmod a+rx /opt/setup_ispg_things.sh
+RUN chmod a+rx /opt/setup-ispg-things.sh
 
 CMD ["/sbin/my_my_init"]

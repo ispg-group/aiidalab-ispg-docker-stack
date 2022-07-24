@@ -1,0 +1,15 @@
+#!/bin/bash
+set -em
+
+SLURM_USER=slurm
+
+# TODO: It will be safer to split this to separate services
+
+# --force needed to get rid of permission error
+# TODO: Solve it rigorously in Dockerfile
+su -c "munged --force" root
+su -c slurmctld root
+
+# NOTE: This needs to run in the foreground!
+# Otherwise this script would be continuously re-executed by runsv
+su -c "slurmd -D -L /home/${SYSTEM_USER}/slurmd.log" root
