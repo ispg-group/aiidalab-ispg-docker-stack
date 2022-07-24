@@ -1,0 +1,6 @@
+#!/bin/bash
+set -em
+
+# --force needed to get rid of permission error
+# TODO: Solve it rigorously in Dockerfile
+su -c "munged --force -F" root

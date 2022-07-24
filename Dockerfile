@@ -13,7 +13,9 @@ COPY opt/slurm.conf /etc/slurm-llnl/slurm.conf
 RUN mkdir /run/munge
 
 # Copy scripts to start SLURM daemons
-COPY service/slurm /etc/service/slurm/run
+COPY service/munged /etc/service/munged/run
+COPY service/slurmctld /etc/service/slurmctld/run
+COPY service/slurmd /etc/service/slurmd/run
 
 # In case we need the latest aiidalab
 # This might conflict with the AiiDAlab docker image
