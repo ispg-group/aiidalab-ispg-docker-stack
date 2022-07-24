@@ -1,12 +1,15 @@
-computer_name=localhost
-code_name=orca
+# Note: We defer the orca code installation for the post_install script
+# that should be run after aiidalab-ispg app is installed.
 
-verdi code show ${code_name}@${computer_name} || verdi code setup \
-    --non-interactive                                             \
-    --label ${code_name}                                          \
-    --description "${code_name} code connected via docker volume."\
-    --input-plugin orca_main                                      \
-    --computer ${computer_name}                                   \
-    --remote-abs-path `which ${code_name}`
+set -euo pipefail
 
-# TODO: Configure a new computer with SLURM manager and install orca code on it
+# However, we do setup a new computer configured with SLURM.
+computer_name=slurm
+
+verdi computer setup --non-interactive \
+  --label $computer_name -H localhost -D "localhost with SLURM" \
+  --scheduler slurm --transport local \
+  --mpiprocs-per-machine 1 --work-dir /home/aiida/aiida_run/ \
+
+verdi computer configure local $computer_name \
+  --non-interactive --safe-interval 0 --use-login-shell
