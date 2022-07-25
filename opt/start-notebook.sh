@@ -13,7 +13,7 @@ cd /home/${SYSTEM_USER}
 if [[ ! -z "${JUPYTERHUB_API_TOKEN}" ]]; then
 
   # Launched by JupyterHub, use single-user entrypoint.
-  /usr/bin/python3 /opt/aiidalab-singleuser                           \
+  /usr/bin/python3 /opt/aiidalab-singleuser                          \
       --ip=0.0.0.0                                                   \
       --port=8888                                                    \
       --notebook-dir="/home/${SYSTEM_USER}"                          \
@@ -25,16 +25,17 @@ if [[ ! -z "${JUPYTERHUB_API_TOKEN}" ]]; then
 else
 
   # Otherwise launch notebook server directly.
-  /usr/local/bin/jupyter-notebook                                    \
-      --ip=0.0.0.0                                                   \
-      --port=8888                                                    \
-      --no-browser                                                   \
-      --ContentsManager.allow_hidden=True                            \
-      --notebook-dir="/home/${SYSTEM_USER}"                          \
-      --VoilaConfiguration.template=aiidalab                         \
-      --VoilaConfiguration.enable_nbextensions=True                  \
-      --certfile=/opt/certificates/localhost.crt                     \
-      --keyfile=/opt/certificates/localhost.key                      \
-      --VoilaConfiguration.enable_nbextensions=True                  \
-      --NotebookApp.default_url="/apps/apps/home/start.ipynb"
+  /usr/local/bin/jupyter-notebook \
+      --ip=0.0.0.0 \
+      --port=8888 \
+      --no-browser \
+      --ContentsManager.allow_hidden=True \
+      --notebook-dir="/home/${SYSTEM_USER}" \
+      --NotebookApp.default_url="/apps/apps/home/start.ipynb" \
+      --certfile=/opt/certificates/localhost.crt \
+      --keyfile=/opt/certificates/localhost.key
+
+# I am not even sure that Voila currently works.
+#      --VoilaConfiguration.template=aiidalab                         \
+#      --VoilaConfiguration.enable_nbextensions=True                  \
 fi

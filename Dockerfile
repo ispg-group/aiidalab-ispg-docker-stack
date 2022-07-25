@@ -25,7 +25,7 @@ COPY certificates/localhost.key /opt/certificates/localhost.key
 # TODO: Figure out a better way!
 RUN chmod a+r /opt/certificates/localhost.crt /opt/certificates/localhost.key
 
-# Start Jupyter notebook for HTTPS
+# Start Jupyter notebook with HTTPS
 COPY opt/start-notebook.sh /opt/
 
 # Prepare user's folders for AiiDAlab launch.
