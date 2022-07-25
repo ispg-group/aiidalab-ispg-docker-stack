@@ -10,10 +10,7 @@ RUN conda install --yes -c conda-forge xtb-python
 # Install and configure SLURM
 RUN apt-get update && apt-get install --yes slurm-wlm \
   && rm -rf /var/lib/apt/lists/*
-# Not sure if this is needed
-RUN apt-get autoremove && apt-get autoclean && apt-get clean
-
-COPY opt/slurm.conf /etc/slurm-llnl/slurm.conf
+COPY --chown=slurm opt/slurm.conf /etc/slurm-llnl/slurm.conf
 RUN mkdir /run/munge
 
 # Copy scripts to start SLURM daemons
@@ -21,10 +18,15 @@ COPY service/munged /etc/service/munged/run
 COPY service/slurmctld /etc/service/slurmctld/run
 COPY service/slurmd /etc/service/slurmd/run
 
-# In case we need the latest aiidalab
-# This might conflict with the AiiDAlab docker image
-# so possibly not a good idea
-#RUN pip install --upgrade aiidalab
+# Copy in SSL certificate and private key
+# WARNING: This assumes that the Docker image is build locally and never published!!!
+COPY certificates/localhost.crt /opt/certificates/localhost.crt
+COPY certificates/localhost.key /opt/certificates/localhost.key
+# TODO: Figure out a better way!
+RUN chmod a+r /opt/certificates/localhost.crt /opt/certificates/localhost.key
+
+# Start Jupyter notebook for HTTPS
+COPY opt/start-notebook.sh /opt/
 
 # Prepare user's folders for AiiDAlab launch.
 COPY opt/setup-ispg-things.sh /opt/
@@ -36,5 +38,6 @@ COPY my_init.d/setup-ispg-things.sh /etc/my_init.d/79_setup-ispg-things.sh
 
 # Not sure why we need this here while it is not needed in aiidalab-docker-stack
 RUN chmod a+rx /opt/setup-ispg-things.sh
+RUN chmod a+rx /opt/start-notebook.sh
 
 CMD ["/sbin/my_my_init"]
