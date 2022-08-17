@@ -11,6 +11,10 @@ RUN conda install --yes -c conda-forge xtb-python
 RUN apt-get update && apt-get install --yes slurm-wlm \
   && rm -rf /var/lib/apt/lists/*
 COPY --chown=slurm opt/slurm.conf /etc/slurm/slurm.conf
+# This is needed for aiida user to be able to access SLURM.
+# Perhaps we should add aiida user to slurm group.
+RUN chmod a+r /etc/slurm/slurm.conf
+
 RUN mkdir /run/munge
 
 # Copy scripts to start SLURM daemons
