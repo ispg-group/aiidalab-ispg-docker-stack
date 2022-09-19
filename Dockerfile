@@ -1,4 +1,4 @@
-FROM aiidalab/aiidalab-docker-stack:latest
+FROM aiidalab/full-stack:edge
 LABEL maintainer="Daniel Hollas <daniel.hollas@bristol.ac.uk>"
 
 USER root
@@ -32,18 +32,15 @@ COPY certificates/localhost.key /opt/certificates/localhost.key
 RUN chmod a+r /opt/certificates/localhost.crt /opt/certificates/localhost.key
 
 # Start Jupyter notebook with HTTPS
-COPY opt/start-notebook.sh /opt/
-
-# Prepare user's folders for AiiDAlab launch.
-COPY opt/setup-ispg-things.sh /opt/
+# TODO: Needs to be replaced by something else
+#COPY opt/start-notebook.sh /opt/
 
 # NOTE: This script sets up the slurm computer in AiiDA DB
-# so it needs to run before 80_prepare-aiidalab.sh,
+# so it needs to run before 60_prepare-aiidalab.sh,
 # which installs the aiidalab-ispg, which in turn installs the orca code nodes.
-COPY my_init.d/setup-ispg-things.sh /etc/my_init.d/79_setup-ispg-things.sh
+COPY opt/setup-ispg-things.sh /usr/local/bin/before-notebook.d/59_setup-ispg-things.sh
 
-# Not sure why we need this here while it is not needed in aiidalab-docker-stack
-RUN chmod a+rx /opt/setup-ispg-things.sh
-RUN chmod a+rx /opt/start-notebook.sh
+RUN chmod a+rx /usr/local/bin/before-notebook.d/59_setup-ispg-things.sh
 
-CMD ["/sbin/my_my_init"]
+USER ${NB_USER}
+WORKDIR "/home/${NB_USER}/"

@@ -9,9 +9,9 @@ computer_name=slurm
 if ! verdi computer show $computer_name &> /dev/null; then
   verdi computer setup --non-interactive \
     --label $computer_name -H localhost -D "localhost with SLURM" \
-    --scheduler slurm --transport local \
+    --scheduler core.slurm --transport core.local \
     --mpiprocs-per-machine 1 --work-dir /home/aiida/aiida_run/
 
-  verdi computer configure local $computer_name \
+  verdi computer configure core.local $computer_name \
     --non-interactive --safe-interval 0 --use-login-shell
 fi
