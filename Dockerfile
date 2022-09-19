@@ -12,14 +12,15 @@ RUN conda install --yes -c conda-forge xtb-python openmpi=4.1.1
 # Install and configure SLURM
 RUN apt-get update && apt-get install --yes slurm-wlm \
   && rm -rf /var/lib/apt/lists/*
-COPY --chown=slurm opt/slurm.conf /etc/slurm/slurm.conf
+COPY --chown=slurm opt/slurm.conf /etc/slurm-llnl/slurm.conf
 # This is needed for aiida user to be able to access SLURM.
 # Perhaps we should add aiida user to slurm group.
-RUN chmod a+r /etc/slurm/slurm.conf
+RUN chmod a+r /etc/slurm-llnl/slurm.conf
 
 RUN mkdir /run/munge
 
 # Copy scripts to start SLURM daemons
+# TODO: /etc/service does not seem to do the trick in the new image!
 COPY service/munged /etc/service/munged/run
 COPY service/slurmctld /etc/service/slurmctld/run
 COPY service/slurmd /etc/service/slurmd/run
