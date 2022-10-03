@@ -43,5 +43,4 @@ COPY --chown=${NB_USER}:users certificates/localhost.key /etc/ssl/notebook/local
 COPY opt/setup-ispg-things.sh /usr/local/bin/before-notebook.d/59_setup-ispg-things.sh
 RUN chmod a+r /usr/local/bin/before-notebook.d/59_setup-ispg-things.sh
 
-USER ${NB_USER}
 WORKDIR "/home/${NB_USER}/"
