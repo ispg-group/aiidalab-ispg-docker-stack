@@ -24,17 +24,18 @@ RUN mkdir /run/munge
 # be executed by root user.
 # Scripts in before-notebook.d/ must be executed by ${NB_USER}
 # For this to work, we need to patch the start.sh script, see below.
-COPY slurm/slurm-service.sh /usr/local/bin/start-notebook.d/10_slurm-service.sh
+COPY --chown=${NB_USER}:users slurm/slurm-service.sh /usr/local/bin/start-notebook.d/10_slurm-service.sh
 # Patch the start.sh script to run hooks under NB_USER
 # even if called with root user
 COPY jupyter-start.sh /usr/local/bin/start.sh
 
 # Copy in SSL certificate and private key
 # WARNING: This assumes that the Docker image is build locally and never published!!!
-COPY certificates/localhost.crt /opt/certificates/localhost.crt
-COPY certificates/localhost.key /opt/certificates/localhost.key
-# TODO: Figure out a better way!
-RUN chmod a+r /opt/certificates/localhost.crt /opt/certificates/localhost.key
+# TODO: It will be better to do it by mounting a volume
+# when running a container, per
+# https://jupyter-docker-stacks.readthedocs.io/en/latest/using/common.html#ssl-certificates
+COPY --chown=${NB_USER}:users certificates/localhost.crt /etc/ssl/notebook/localhost.crt
+COPY --chown=${NB_USER}:users certificates/localhost.key /etc/ssl/notebook/localhost.key
 
 # NOTE: This script sets up the slurm computer in AiiDA DB
 # so it needs to run before 60_prepare-aiidalab.sh,
