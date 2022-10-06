@@ -5,7 +5,9 @@ USER root
 WORKDIR /opt/
 
 # xtb-python is not published on PyPI so we need to install here via conda
-RUN conda install --yes -c conda-forge xtb-python
+# We're also installing OpenMPI for ORCA parallelization,
+# Concretely version specific to ORCA5
+RUN conda install --yes -c conda-forge xtb-python openmpi=4.1.1
 
 # Install and configure SLURM
 RUN apt-get update && apt-get install --yes slurm-wlm \
