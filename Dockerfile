@@ -13,7 +13,7 @@ RUN mamba install --yes -c conda-forge xtb-python openmpi=4.1.1 \
      fix-permissions "/home/${NB_USER}"
 
 # Install and configure SLURM
-RUN apt-get update && apt-get install --yes slurm-wlm \
+RUN apt-get update && apt-get install --yes vim slurm-wlm \
   && rm -rf /var/lib/apt/lists/*
 COPY --chown=slurm slurm/slurm.conf /etc/slurm-llnl/slurm.conf
 RUN usermod -a -G slurm ${NB_USER}
