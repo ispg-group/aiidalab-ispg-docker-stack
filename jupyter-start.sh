@@ -107,7 +107,7 @@ if [ "$(id -u)" == 0 ] ; then
     # and that's where we will place the SLURM services.
     # NOTE: The declare trick is needed to make the run-hooks function accessible under sudo, per:
     # https://unix.stackexchange.com/a/269080/380659
-    sudo -E -H -u "${NB_USER}" bash -c "$(declare -f run-hooks); run-hooks /usr/local/bin/before-notebook.d"
+    runuser --preserve-environment -c "$(declare -f run-hooks); run-hooks /usr/local/bin/before-notebook.d" "${NB_USER}"
     # Exec the command as NB_USER with the PATH and the rest of
     # the environment preserved
     echo "Executing the command:" "${cmd[@]}"
