@@ -33,11 +33,17 @@ jobs:
                   registry: ghcr.io
                   username: ${{ github.actor }}
                   password: ${{ secrets.GITHUB_TOKEN }}
+            - name: Docker meta
+              id: meta
+              uses: docker/metadata-action@v4
+              with:
+                images: ghcr.io/${{ github.repository }}
+                tags: latest
             - name: Build image
               id: build
               uses: docker/build-push-action@v3
               with:
-                  tags: ispg/atmospec:latest
+                  tags: ${{ steps.meta.outputs.tags }}
                   push: true
 
     test:
