@@ -1,12 +1,10 @@
-# aiidalab-ispg-docker-docker
+# aiidalab-ispg-docker-stack
 Dockerfile for AiidaLab ATMOSPEC deployment.
 
 The following extra things are added:
 
 1. SLURM queuing manager
-2. Additional conda packages (xtb-python)
-   which currently must be installed in root conda environment.
-3. HTTPS support
+2. Additional conda packages pre-installed (xtb-python, openmpi)
 
 Inspired by https://github.com/aiidalab/aiidalab-docker-stack-demo
 
