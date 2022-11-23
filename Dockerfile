@@ -7,6 +7,12 @@ WORKDIR /opt/
 # xtb-python is not published on PyPI so we need to install here via conda
 # We're also installing OpenMPI for ORCA parallelization,
 # concretely version specific to ORCA-5.0.3
+#
+# Note that for ORCA we could also create a separate
+# conda environment and activate it before the code is run in the workflow.
+# This wouldn't work for xtb-python, which is needed
+# in the default conda environment, since it is not used
+# through an AiiDA workflow, but directly from AiiDAlab UI.
 RUN mamba install --yes -c conda-forge xtb-python openmpi=4.1.1 \
      && mamba clean --all -f -y && \
      fix-permissions "${CONDA_DIR}" && \
@@ -34,14 +40,6 @@ COPY --chown=${NB_USER}:users slurm/slurm-service.sh /usr/local/bin/start-notebo
 # Patch the start.sh script to run hooks under NB_USER
 # even if called with root user
 COPY jupyter-start.sh /usr/local/bin/start.sh
-
-# Copy in SSL certificate and private key
-# WARNING: This assumes that the Docker image is build locally and never published!!!
-# TODO: It will be better to do it by mounting a volume
-# when running a container, per
-# https://jupyter-docker-stacks.readthedocs.io/en/latest/using/common.html#ssl-certificates
-COPY --chown=${NB_USER}:users certificates/localhost.crt /etc/ssl/notebook/localhost.crt
-COPY --chown=${NB_USER}:users certificates/localhost.key /etc/ssl/notebook/localhost.key
 
 # NOTE: This script sets up the slurm computer in AiiDA DB
 # so it needs to run before 60_prepare-aiidalab.sh,
