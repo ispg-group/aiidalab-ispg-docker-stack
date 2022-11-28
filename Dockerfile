@@ -24,11 +24,12 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --chown=slurm slurm/slurm.conf /etc/slurm-llnl/slurm.conf
+COPY --chown=slurm slurm/slurm.conf /etc/slurm/slurm.conf
 RUN usermod -a -G slurm ${NB_USER}
-RUN chmod a+r /etc/slurm-llnl/slurm.conf
+RUN chmod a+r /etc/slurm/slurm.conf
 
 RUN mkdir /run/munge
+RUN chown -R root /etc/munge /var/lib/munge
 
 # Copy script to start SLURM daemons
 # NOTE: It is imperative to copy this script into the
