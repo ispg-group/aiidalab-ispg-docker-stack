@@ -1,10 +1,10 @@
 ---
-# Build and test all Docker images on every push and pull request.
+# Build and test the ATMOSPEC Docker image on every push and pull request.
 #
 # Builds the images with docker buildx bake and pushes them to a local Docker
 # image registry, and runs the automated tests with pytest.
 
-name: continuous-integration
+name: build-and-test
 
 on:
     push:
@@ -22,6 +22,9 @@ jobs:
 
         runs-on: ubuntu-latest
         timeout-minutes: 20
+        permissions:
+          packages: write
+          contents: read
 
         #outputs:
         #    images: ${{ steps.bake_metadata.outputs.images }}
@@ -48,6 +51,7 @@ jobs:
               id: build
               uses: docker/build-push-action@v3
               with:
+                  context: .
                   tags: ${{ steps.meta.outputs.tags }}
                   push: true
 
