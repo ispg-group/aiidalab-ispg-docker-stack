@@ -38,7 +38,7 @@ jobs:
               id: meta
               uses: docker/metadata-action@v4
               with:
-                images: ghcr.io/ispg-group/atmospec
+                images: ghcr.io/ispg-group/aiidalab-ispg-docker-stack
                 tags: |
                     type=edge
                     type=ref,event=pr
@@ -74,7 +74,7 @@ jobs:
               run: pytest -v
               env:
                 REGISTRY: "ghcr.io/"
-                ISPG_IMAGE: ispg-group/atmospec
+                ISPG_IMAGE: ispg-group/aiidalab-ispg-docker-stack
                 TAG: pr-11
 
 
