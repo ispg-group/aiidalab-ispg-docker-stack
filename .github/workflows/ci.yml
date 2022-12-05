@@ -17,7 +17,7 @@ on:
             - main
 
 env:
-  REGISTRY: ghcr.io
+  REGISTRY: ghcr.io/
   ISPG_IMAGE: ${{ github.repository_owner }}/atmospec
 
 jobs:
@@ -45,7 +45,7 @@ jobs:
               id: meta
               uses: docker/metadata-action@v4
               with:
-                images: ${{ env.REGISTRY }}/${{ env.ISPG_IMAGE }}
+                images: ${{ env.REGISTRY }}${{ env.ISPG_IMAGE }}
                 tags: |
                     type=edge
                     type=ref,event=pr
