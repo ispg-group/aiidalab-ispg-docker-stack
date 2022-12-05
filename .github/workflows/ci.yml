@@ -46,8 +46,10 @@ jobs:
               uses: docker/metadata-action@v4
               with:
                 images: ${{ env.REGISTRY }}${{ env.ISPG_IMAGE }}
+                flavor: |
+                    latest=true
                 tags: |
-                    type=edge
+                    type=edge,branch=aiida2
                     type=ref,event=pr
                     type=raw,value={{tag}},enable=${{ github.ref_type == 'tag' && ! startsWith(github.ref_name, 'v') }}
                     type=match,pattern=v(\d{4}\.\d{4}(-.+)?),group=1
@@ -62,6 +64,9 @@ jobs:
         needs: build
         runs-on: ubuntu-latest
         timeout-minutes: 10
+        permissions:
+          packages: read
+          contents: read
 
         steps:
             - uses: actions/checkout@v2
@@ -81,7 +86,6 @@ jobs:
               run: pytest -v
               env:
                 TAG: pr-11
-
 
     release:
         if: >-
