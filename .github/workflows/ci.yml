@@ -18,7 +18,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  ISPG_IMAGE: ${{ github.repository }}
+  ISPG_IMAGE: ${{ github.repository_owner }}/atmospec
 
 jobs:
 
