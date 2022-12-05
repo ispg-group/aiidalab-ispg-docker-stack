@@ -13,7 +13,7 @@ def test_pip_check(aiidalab_exec):
     aiidalab_exec("pip check")
 
 
-def test_aiidalab_available(aiidalab_exec, nb_user, variant):
+def test_aiidalab_available(aiidalab_exec, nb_user):
     output = aiidalab_exec("aiidalab --version", user=nb_user).decode().strip().lower()
     assert "aiidalab" in output
 
