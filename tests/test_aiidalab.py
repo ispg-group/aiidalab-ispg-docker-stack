@@ -47,4 +47,4 @@ def test_install_apps_from_master(aiidalab_exec, app, nb_user):
     )
     assert "ERROR" not in output
     assert "dependency conflict" not in output
-    assert f"Installed '{package_name}' version" in output
+    assert f"Installed '{appname}' version" in output
