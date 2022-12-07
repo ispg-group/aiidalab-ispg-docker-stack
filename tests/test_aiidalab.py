@@ -31,7 +31,7 @@ def test_verdi_status(aiidalab_exec, nb_user):
 
 @pytest.mark.integration
 @pytest.mark.parametrize("app", [
-    ("aiidalab", "aiidalab-widgets-base"),
+#    ("aiidalab", "aiidalab-widgets-base"),
     ("ispg-group", "aiidalab-ispg")
 ])
 def test_install_apps_from_master(aiidalab_exec, app, nb_user):
@@ -39,7 +39,7 @@ def test_install_apps_from_master(aiidalab_exec, app, nb_user):
     output = (
         aiidalab_exec(
             "aiidalab install --yes "
-            f"{appname}@git+https://github.com/{owner}/{appname}",
+            f"{appname}@git+https://github.com/{owner}/{appname}@aiida2",
             user=nb_user,
         )
         .decode()
