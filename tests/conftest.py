@@ -12,7 +12,11 @@ def is_responsive(url):
         response = requests.get(url)
         if response.status_code == 200:
             return True
-    except ConnectionError:
+        else:
+            print("{response.status_code}: {response}")
+            return False
+    except ConnectionError as e:
+        print(e)
         return False
 
 
@@ -22,7 +26,7 @@ def notebook_service(docker_ip, docker_services):
     port = docker_services.port_for("aiidalab", 8888)
     url = f"https://{docker_ip}:{port}"
     docker_services.wait_until_responsive(
-        timeout=30.0, pause=0.5, check=lambda: is_responsive(url)
+        timeout=30.0, pause=2.0, check=lambda: is_responsive(url)
     )
     return url
 
