@@ -32,7 +32,6 @@ def test_verdi_status(aiidalab_exec, nb_user):
     assert "Daemon is running" in output
 
 
-@pytest.mark.integration
 @pytest.mark.parametrize("app", [
     "aiidalab/aiidalab-widgets-base",
     "ispg-group/aiidalab-ispg",
