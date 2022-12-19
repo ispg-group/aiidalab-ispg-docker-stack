@@ -18,7 +18,7 @@ def is_responsive(url):
             print("{response.status_code}: {response}")
             return False
     except ConnectionError as e:
-        print(e)
+        print(f"ConnectionError: {e}")
         return False
 
 
@@ -28,7 +28,7 @@ def notebook_service(docker_ip, docker_services):
     port = docker_services.port_for("aiidalab", 8888)
     url = f"https://{docker_ip}:{port}"
     docker_services.wait_until_responsive(
-        timeout=30.0, pause=2.0, check=lambda: is_responsive(url)
+        timeout=60.0, pause=1.0, check=lambda: is_responsive(url)
     )
     return url
 
