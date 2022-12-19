@@ -5,7 +5,7 @@ from packaging.version import parse
 
 
 def test_notebook_service_available(notebook_service):
-    response = requests.get(f"{notebook_service}/")
+    response = requests.get(f"{notebook_service}/", verify=False)
     assert response.status_code == 200
 
 
