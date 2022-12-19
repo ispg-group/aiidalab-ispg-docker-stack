@@ -3,9 +3,11 @@ from pathlib import Path
 
 import pytest
 import requests
+import urllib3
 
 from requests.exceptions import ConnectionError
 
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def is_responsive(url):
     try:
