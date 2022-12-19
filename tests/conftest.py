@@ -20,9 +20,9 @@ def is_responsive(url):
 def notebook_service(docker_ip, docker_services):
     """Ensure that HTTP service is up and responsive."""
     port = docker_services.port_for("aiidalab", 8888)
-    url = f"http://{docker_ip}:{port}"
+    url = f"https://{docker_ip}:{port}"
     docker_services.wait_until_responsive(
-        timeout=60.0, pause=0.5, check=lambda: is_responsive(url)
+        timeout=30.0, pause=0.5, check=lambda: is_responsive(url)
     )
     return url
 
