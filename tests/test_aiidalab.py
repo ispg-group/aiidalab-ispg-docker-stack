@@ -1,8 +1,10 @@
 import pytest
 import requests
 import json
+import urllib3
 from packaging.version import parse
 
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def test_notebook_service_available(notebook_service):
     response = requests.get(f"{notebook_service}/", verify=False)
