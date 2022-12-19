@@ -7,9 +7,8 @@ import urllib3
 
 from requests.exceptions import ConnectionError
 
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
 def is_responsive(url):
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
     try:
         response = requests.get(url, verify=False)
         if response.status_code == 200:

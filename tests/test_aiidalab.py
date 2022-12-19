@@ -4,9 +4,10 @@ import json
 import urllib3
 from packaging.version import parse
 
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
 def test_notebook_service_available(notebook_service):
+    # Disable warning coming from self-signed SSL certificate
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+    # Do not verify SSL certificate
     response = requests.get(f"{notebook_service}/", verify=False)
     assert response.status_code == 200
 
