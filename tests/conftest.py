@@ -18,7 +18,6 @@ def is_responsive(url):
             print("{response.status_code}: {response}")
             return False
     except ConnectionError as e:
-        print(f"ConnectionError: {e}")
         return False
 
 
