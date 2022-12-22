@@ -43,7 +43,12 @@ jobs:
               uses: docker/metadata-action@v4
               with:
                   images: ${{ env.REGISTRY }}${{ env.ISPG_IMAGE }}
+                  # Before tests pass, we tag the image by the Git commit SHA
+                  # and by pull request number, e.g. pr-11
+                  # https://github.com/docker/metadata-action#tags-input
+                  # See the release workflow for the release tags.
                   tags: |
+                      type=sha
                       type=ref,event=pr
             - name: Build image
               id: build
@@ -80,9 +85,9 @@ jobs:
                 ISPG_IMAGE: ${{ env.ISPG_IMAGE }}@${{ needs.build.outputs.image_digest }}
 
     release:
-        if: >-
-            github.repository == 'ispg-group/aiidalab-ispg-docker-stack'
-            && (github.ref_type == 'tag' || github.ref_name == 'main')
+      #if: >-
+      #      github.repository == 'ispg-group/aiidalab-ispg-docker-stack'
+      #      && (github.ref_type == 'tag' || github.ref_name == 'aiida2')
         needs:
             - build
             - test
@@ -97,7 +102,7 @@ jobs:
               with:
                 images: ${{ env.REGISTRY }}${{ env.ISPG_IMAGE }}
                 tags: |
-                    type=edge,branch=main
+                    type=edge,branch=aiida2
                     type=raw,value={{tag}},enable=${{ github.ref_type == 'tag' && ! startsWith(github.ref_name, 'v') }}
                     type=match,pattern=v(\d{4}\.\d{4}(-.+)?),group=1
 
