@@ -43,12 +43,12 @@ jobs:
               uses: docker/metadata-action@v4
               with:
                   images: ${{ env.REGISTRY }}${{ env.ISPG_IMAGE }}
-                  # Before tests pass, we tag the image by the Git commit SHA
+                  # Before tests pass, we tag the image by 'tip' to indicate latest build,
                   # and by pull request number, e.g. pr-11
                   # https://github.com/docker/metadata-action#tags-input
                   # See the release workflow for the release tags.
                   tags: |
-                      type=raw,value=current-build,enable=${{ github.ref_type != 'pull_request' }}
+                      type=raw,value=tip # Must be here so we have at least one tag
                       type=ref,event=pr
             - name: Build image
               id: build
