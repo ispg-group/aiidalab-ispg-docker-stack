@@ -1,4 +1,4 @@
-# aiidalab-ispg-docker-docker
+# aiidalab-ispg-docker-stack
 Dockerfile for AiidaLab ATMOSPEC deployment.
 
 The following extra things are added on top of the `aiidalab/full-stack` image:
