@@ -81,11 +81,11 @@ jobs:
               shell: bash -l {0}  # required to activate the conda environment
               run: pytest -vs
               env:
-                # Image that was build in the build workflow
-                ISPG_IMAGE: ${{ env.ISPG_IMAGE }}@${{ needs.build.outputs.image_digest }}
+                  # Image that was build in the build workflow
+                  ISPG_IMAGE: ${{ env.ISPG_IMAGE }}@${{ needs.build.outputs.image_digest }}
 
     release:
-      if: >-
+        if: >-
             github.repository == 'ispg-group/aiidalab-ispg-docker-stack'
             && (github.ref_type == 'tag' || github.ref_name == 'main')
         needs:
@@ -100,11 +100,11 @@ jobs:
               id: meta
               uses: docker/metadata-action@v4
               with:
-                images: ${{ env.REGISTRY }}${{ env.ISPG_IMAGE }}
-                tags: |
-                    type=edge
-                    type=raw,value={{tag}},enable=${{ github.ref_type == 'tag' && ! startsWith(github.ref_name, 'v') }}
-                    type=match,pattern=v(\d{4}\.\d{4}(-.+)?),group=1
+                  images: ${{ env.REGISTRY }}${{ env.ISPG_IMAGE }}
+                  tags: |
+                      type=edge
+                      type=raw,value={{tag}},enable=${{ github.ref_type == 'tag' && ! startsWith(github.ref_name, 'v') }}
+                      type=match,pattern=v(\d{4}\.\d{4}(-.+)?),group=1
 
             - name: Push image
               uses: akhilerm/tag-push-action@v2.0.0
