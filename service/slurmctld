@@ -1,6 +1,0 @@
-#!/bin/bash
-set -em
-
-# TODO: Not sure if logs are being written
-# when running in the foreground mode?
-su -c "slurmctld -D" root

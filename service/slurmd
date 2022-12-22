@@ -1,6 +1,0 @@
-#!/bin/bash
-set -em
-
-# NOTE: This needs to run in the foreground!
-# Otherwise this script would be continuously re-executed by runsv
-su -c "slurmd -D" root

@@ -1,12 +1,14 @@
 # aiidalab-ispg-docker-stack
 Dockerfile for AiidaLab ATMOSPEC deployment.
 
-The following extra things are added:
+The following extra things are added on top of the `aiidalab/full-stack` image:
 
 1. SLURM queuing manager
-2. Additional conda packages pre-installed (xtb-python, openmpi)
+2. Additional conda packages (xtb-python, OpenMPI)
+   which currently must be installed in root conda environment.
+3. HTTPS support
 
-Inspired by https://github.com/aiidalab/aiidalab-docker-stack-demo
+Original images taken from https://github.com/aiidalab/aiidalab-docker-stack
 
 ## Creating your own SSL certificates for HTTPS
 
@@ -55,8 +57,3 @@ mkcert -CAROOT
 ```
 **WARNING**: Under any circumstances DO NOT share the `rootCA-key.pem`!
 This would allow anybody to spoof trafic to you.
-
-## Future work
-
-TODO: Figure out how to do HTTP build without the SSL certificates
-Possibly by filtering out commands from Dockerfile and invoking docker build from stdin.
