@@ -4,7 +4,7 @@ version: '3.4'
 services:
 
     aiidalab:
-        image: ${REGISTRY:-}${ISPG_IMAGE:-ispg-group/atmospec}:${TAG:-latest}
+        image: ${REGISTRY:-}${ISPG_IMAGE:-ispg-group/atmospec}${TAG:-}
         environment:
             TZ: Europe/Zurich
             DOCKER_STACKS_JUPYTER_CMD: notebook
