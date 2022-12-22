@@ -47,6 +47,7 @@ jobs:
                   # and by pull request number, e.g. pr-11
                   # https://github.com/docker/metadata-action#tags-input
                   # See the release workflow for the release tags.
+                  # TODO: Figure out a better solution rather than using 'tip' tag
                   tags: |
                       type=raw,value=tip # Must be here so we have at least one tag
                       type=ref,event=pr
@@ -91,11 +92,20 @@ jobs:
         needs:
             - build
             - test
-
+        permissions:
+            packages: write
+            contents: read
         runs-on: ubuntu-latest
         timeout-minutes: 10
 
         steps:
+            - name: Login to GitHub Container Registry
+              uses: docker/login-action@v2
+              with:
+                  registry: ghcr.io
+                  username: ${{ github.actor }}
+                  password: ${{ secrets.GITHUB_TOKEN }}
+
             - name: Docker meta
               id: meta
               uses: docker/metadata-action@v4
@@ -106,7 +116,7 @@ jobs:
                       type=raw,value={{tag}},enable=${{ github.ref_type == 'tag' && ! startsWith(github.ref_name, 'v') }}
                       type=match,pattern=v(\d{4}\.\d{4}(-.+)?),group=1
 
-            - name: Push image
+            - name: Release image
               uses: akhilerm/tag-push-action@v2.0.0
               with:
                   src: ${{ env.REGISTRY }}${{ env.ISPG_IMAGE }}@${{ needs.build.outputs.image_digest }}
