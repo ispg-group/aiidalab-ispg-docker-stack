@@ -94,11 +94,12 @@ jobs:
             - test
         permissions:
             packages: write
-            contents: read
+            contents: write
         runs-on: ubuntu-latest
         timeout-minutes: 10
 
         steps:
+            - uses: actions/checkout@v3
             - name: Login to GitHub Container Registry
               uses: docker/login-action@v2
               with:
@@ -114,7 +115,7 @@ jobs:
                   tags: |
                       type=edge
                       type=raw,value={{tag}},enable=${{ github.ref_type == 'tag' && ! startsWith(github.ref_name, 'v') }}
-                      type=match,pattern=v(\d{4}\.\d{4}(-.+)?),group=1
+                      type=match,pattern=v(\d{4}\.\d{2}.\d+(-.+)?),group=1
 
             - name: Release image
               uses: akhilerm/tag-push-action@v2.0.0

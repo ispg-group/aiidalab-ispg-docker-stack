@@ -1,0 +1,12 @@
+[bumpver]
+current_version = "v2022.12.1-alpha"
+version_pattern = "vYYYY.0M.PATCH[-TAG]"
+commit_message = "Bump version {old_version} -> {new_version}"
+commit = true
+tag = true
+push = true
+
+[bumpver.file_patterns]
+"bumpver.toml" = [
+    'current_version = "{version}"'
+]
