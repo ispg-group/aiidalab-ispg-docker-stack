@@ -48,8 +48,4 @@ COPY jupyter-start.sh /usr/local/bin/start.sh
 COPY opt/setup-ispg-things.sh /usr/local/bin/before-notebook.d/59_setup-ispg-things.sh
 RUN chmod a+r /usr/local/bin/before-notebook.d/59_setup-ispg-things.sh
 
-# Automatically generate self-signed SSL certificate
-# and configure notebook for HTTPS connection
-ENV GEN_CERT=yes
-
 WORKDIR "/home/${NB_USER}/"
