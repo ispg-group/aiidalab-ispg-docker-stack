@@ -49,3 +49,5 @@ if [ "$(id -u)" == 0 ] ; then
   run-one-constantly slurmctld -D &
   run-one-constantly slurmd -D &
 fi
+
+set +u
