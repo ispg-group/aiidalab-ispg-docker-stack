@@ -26,9 +26,9 @@ RUN apt-get update \
 
 ENV SLURM_CONF_FILE /etc/slurm/slurm.conf
 
-COPY --chown=slurm slurm/slurm.conf "${SLURM_CONF_FILE}"
+COPY --chown=slurm slurm/slurm.conf /opt/slurm.conf
 RUN usermod -a -G slurm ${NB_USER}
-RUN chmod a+r /etc/slurm/slurm.conf
+RUN chmod a+r /opt/slurm.conf
 
 RUN mkdir /run/munge
 RUN chown -R root /etc/munge /var/lib/munge
