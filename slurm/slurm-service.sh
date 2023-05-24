@@ -32,11 +32,7 @@ echo "Using the following configuration for SLURM:"
 echo "RAM: ${SLURM_MEMORY_MB}Mb  NCPU: ${SLURM_NCPU}"
 echo "See ${SLURM_CONF_FILE} for details"
 
-if [[ ! -f $SLURM_CONF_FILE ]];then
-  echo "ERROR: $SLURM_CONF_FILE does not exist!"
-  exit 1
-fi
-
+cp /opt/slurm.conf $SLURM_CONF_FILE
 cat >> $SLURM_CONF_FILE << EOF
 NodeName=localhost RealMemory=$SLURM_MEMORY_MB ThreadsPerCore=1 Sockets=1 CoresPerSocket=$SLURM_NCPU State=UNKNOWN
 EOF
