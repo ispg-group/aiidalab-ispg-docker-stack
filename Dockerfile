@@ -50,4 +50,14 @@ COPY jupyter-start.sh /usr/local/bin/start.sh
 COPY opt/setup-ispg-things.sh /usr/local/bin/before-notebook.d/59_setup-ispg-things.sh
 RUN chmod a+r /usr/local/bin/before-notebook.d/59_setup-ispg-things.sh
 
+ENV NOTEBOOK_ARGS \
+     "${NOTEBOOK_ARGS}" \
+     "--MappingKernelManager.buffer_offline_messages=True" \
+     "--MappingKernelManager.cull_busy=True" \
+     "--MappingKernelManager.cull_connected=True" \
+     "--MappingKernelManager.cull_idle_timeout=64800" \
+     "--MappingKernelManager.cull_interval=300" \
+     "--TerminalManager.cull_inactive_timeout=600" \
+     "--TerminalManager.cull_interval=60"
+
 WORKDIR "/home/${NB_USER}/"
