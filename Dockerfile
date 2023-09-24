@@ -4,15 +4,12 @@ LABEL maintainer="Daniel Hollas <daniel.hollas@bristol.ac.uk>"
 USER root
 WORKDIR /opt/
 
-# xtb-python is not published on PyPI so we need to install here via conda
-# We're also installing OpenMPI for ORCA parallelization,
-# concretely version specific to ORCA-5.0.3
-#
-# Note that for ORCA we could also create a separate
-# conda environment and activate it before the code is run in the workflow.
-# This wouldn't work for xtb-python, which is needed
-# in the default conda environment, since it is not used
-# through an AiiDA workflow, but directly from AiiDAlab UI.
+# TODO: It looks like xtb-python is now available on Conda,
+# so we should just declare it with other dependencies in setup.cfg
+# https://pypi.org/project/xtb/#history
+# TODO: Move openmpi-installation to its own conda environment
+# as part of the aiidalab-ispg installation in `post_install` script,
+# see how QeApp does this.
 RUN mamba install --yes -c conda-forge xtb-python openmpi=4.1.1 \
      && mamba clean --all -f -y && \
      fix-permissions "${CONDA_DIR}" && \
@@ -49,15 +46,4 @@ COPY jupyter-start.sh /usr/local/bin/start.sh
 # which installs the aiidalab-ispg, which in turn installs the orca code nodes.
 COPY opt/setup-ispg-things.sh /usr/local/bin/before-notebook.d/59_setup-ispg-things.sh
 RUN chmod a+r /usr/local/bin/before-notebook.d/59_setup-ispg-things.sh
-
-ENV NOTEBOOK_ARGS \
-     "${NOTEBOOK_ARGS}" \
-     "--MappingKernelManager.buffer_offline_messages=True" \
-     "--MappingKernelManager.cull_busy=True" \
-     "--MappingKernelManager.cull_connected=True" \
-     "--MappingKernelManager.cull_idle_timeout=64800" \
-     "--MappingKernelManager.cull_interval=300" \
-     "--TerminalManager.cull_inactive_timeout=600" \
-     "--TerminalManager.cull_interval=60"
-
 WORKDIR "/home/${NB_USER}/"
