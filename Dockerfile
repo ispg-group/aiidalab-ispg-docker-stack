@@ -4,17 +4,9 @@ LABEL maintainer="Daniel Hollas <daniel.hollas@bristol.ac.uk>"
 USER root
 WORKDIR /opt/
 
-# TODO: It looks like xtb-python is now available on Conda,
-# so we should just declare it with other dependencies in setup.cfg
-# https://pypi.org/project/xtb/#history
-# TODO: Move openmpi-installation to its own conda environment
-# as part of the aiidalab-ispg installation in `post_install` script,
-# see how QeApp does this.
 # NOTE: We bump traitlets package to 5.9 for performance and app loading speed.
 # This is a temporary measure until we update the underlying Jupyter image.
 RUN mamba install --yes -c conda-forge \
-     xtb-python \
-     openmpi=4.1.1 \
      traitlets=5.9 \
      && mamba clean --all -f -y && \
      fix-permissions "${CONDA_DIR}" && \
