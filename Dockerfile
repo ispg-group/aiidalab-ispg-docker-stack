@@ -6,7 +6,12 @@ WORKDIR /opt/
 
 # NOTE: We bump traitlets package to 5.9 for performance and app loading speed.
 # This is a temporary measure until we update the underlying Jupyter image.
+# NOTE: We could move OpenMPI installation to its own conda environment
+# as part of the aiidalab-ispg installation in `post_install` script,
+# but because it takes a non-trivial amount of time, we install it here
+# to speed up the installation.
 RUN mamba install --yes -c conda-forge \
+     openmpi=4.1.1 \
      traitlets=5.9 \
      && mamba clean --all -f -y && \
      fix-permissions "${CONDA_DIR}" && \

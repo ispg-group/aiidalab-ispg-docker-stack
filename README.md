@@ -4,7 +4,8 @@ Dockerfile for AiidaLab ATMOSPEC deployment.
 The following extra things are added on top of the `aiidalab/full-stack` image:
 
 1. SLURM queuing manager
-3. HTTPS support
+2. Some conda packages (e.g. OpenMPI for parallel ORCA)
+3. TODO: HTTPS support
 
 Original images taken from https://github.com/aiidalab/aiidalab-docker-stack
 
