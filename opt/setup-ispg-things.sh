@@ -1,9 +1,9 @@
-# Note: We defer the orca code installation for the post_install script
-# that should be run after aiidalab-ispg app is installed.
+# Here we setup a new AiiDA computer configured with SLURM.
+# Note: We defer the AiiDA ORCA code installation for the 'post_install' script
+# that is run when aiidalab-ispg app is installed.
 
 set -euo pipefail
 
-# However, we do setup a new computer configured with SLURM.
 computer_name=slurm
 
 # TODO: Use YAML for the config
