@@ -6,11 +6,13 @@ WORKDIR /opt/
 
 # NOTE: We bump traitlets package to 5.9 for performance and app loading speed.
 # This is a temporary measure until we update the underlying Jupyter image.
-# NOTE: We could move OpenMPI installation to its own conda environment
-# as part of the aiidalab-ispg installation in `post_install` script,
-# but because it takes a non-trivial amount of time, we install it here
-# to speed up the installation.
+# NOTE: We could remove the OpenMPI and xTB installations as we now can
+# install them directly during the aiidalab-ispg installation, see:
+# https://github.com/ispg-group/aiidalab-ispg/pull/221
+# but because it takes a non-trivial amount of time,
+# we install them here to speed up the installation.
 RUN mamba install --yes -c conda-forge \
+     xtb-python \
      openmpi=4.1.1 \
      traitlets=5.9 \
      && mamba clean --all -f -y && \
