@@ -10,4 +10,4 @@ dependencies:
     - python=3.11
     - requests=2.31.0
     - pip:
-          - pytest-docker=2.0.1
+          - pytest-docker==2.0.1
