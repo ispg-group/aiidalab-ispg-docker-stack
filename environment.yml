@@ -3,11 +3,11 @@ name: aiidalab-ispg-docker-stack
 channels:
     - conda-forge
 dependencies:
-    - python=3.11
-    - bumpver
+    - bumpver=2023.1129
     - docker-compose>=1.29.2
     - pip
-    - pytest
-    - requests
+    - pytest=7.4.4
+    - python=3.11
+    - requests=2.31.0
     - pip:
-          - pytest-docker
+          - pytest-docker=2.0.1
