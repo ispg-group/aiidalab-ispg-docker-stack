@@ -38,6 +38,7 @@ jobs:
                   registry: ghcr.io
                   username: ${{ github.actor }}
                   password: ${{ secrets.GITHUB_TOKEN }}
+
             - name: Docker meta
               id: meta
               uses: docker/metadata-action@v4
@@ -51,6 +52,7 @@ jobs:
                   tags: |
                       type=raw,value=tip # Must be here so we have at least one tag
                       type=ref,event=pr
+
             - name: Build image
               id: build
               uses: docker/build-push-action@v3
@@ -74,10 +76,13 @@ jobs:
                   registry: ghcr.io
                   username: ${{ github.actor }}
                   password: ${{ secrets.GITHUB_TOKEN }}
+
             - name: Setup Python test environment
-              uses: mamba-org/provision-with-micromamba@v13
+              uses: mamba-org/setup-micromamba@v1
               with:
-                  cache-env: true
+                  environment-file: environment.yml
+                  cache-environment: true
+
             - name: Run tests
               shell: bash -l {0}  # required to activate the conda environment
               run: pytest -vs
