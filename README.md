@@ -1,13 +1,12 @@
 # aiidalab-ispg-docker-stack
-Dockerfile for AiidaLab ATMOSPEC deployment.
+Dockerfile for building AiidaLab ATMOSPEC image.
 
-The following extra things are added on top of the `aiidalab/full-stack` image:
+The following extra things are added on top of the `docker.io/aiidalab/full-stack` image:
 
 1. SLURM queuing manager
 2. Some conda packages (e.g. OpenMPI for parallel ORCA)
-3. TODO: HTTPS support
 
-Original images taken from https://github.com/aiidalab/aiidalab-docker-stack
+Original image is generated and published on DockerHub at <https://github.com/aiidalab/aiidalab-docker-stack>
 
 ## Creating your own SSL certificates for HTTPS
 
