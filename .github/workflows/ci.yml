@@ -33,7 +33,7 @@ jobs:
 
         steps:
             - name: Login to GitHub Container Registry
-              uses: docker/login-action@v2
+              uses: docker/login-action@v3
               with:
                   registry: ghcr.io
                   username: ${{ github.actor }}
@@ -41,7 +41,7 @@ jobs:
 
             - name: Docker meta
               id: meta
-              uses: docker/metadata-action@v4
+              uses: docker/metadata-action@v5
               with:
                   images: ${{ env.REGISTRY }}${{ env.ISPG_IMAGE }}
                   # Before tests pass, we tag the image by 'tip' to indicate latest build,
@@ -55,7 +55,7 @@ jobs:
 
             - name: Build image
               id: build
-              uses: docker/build-push-action@v3
+              uses: docker/build-push-action@v5
               with:
                   tags: ${{ steps.meta.outputs.tags }}
                   push: true
@@ -71,7 +71,7 @@ jobs:
         steps:
             - uses: actions/checkout@v4
             - name: Login to GitHub Container Registry
-              uses: docker/login-action@v2
+              uses: docker/login-action@v3
               with:
                   registry: ghcr.io
                   username: ${{ github.actor }}
@@ -106,7 +106,7 @@ jobs:
         steps:
             - uses: actions/checkout@v4
             - name: Login to GitHub Container Registry
-              uses: docker/login-action@v2
+              uses: docker/login-action@v3
               with:
                   registry: ghcr.io
                   username: ${{ github.actor }}
@@ -114,7 +114,7 @@ jobs:
 
             - name: Docker meta
               id: meta
-              uses: docker/metadata-action@v4
+              uses: docker/metadata-action@v5
               with:
                   images: ${{ env.REGISTRY }}${{ env.ISPG_IMAGE }}
                   tags: |
@@ -123,12 +123,12 @@ jobs:
                       type=match,pattern=v(\d{4}\.\d{2}.\d+(-.+)?),group=1
 
             - name: Release image
-              uses: akhilerm/tag-push-action@v2.0.0
+              uses: akhilerm/tag-push-action@v2.1.0
               with:
                   src: ${{ env.REGISTRY }}${{ env.ISPG_IMAGE }}@${{ needs.build.outputs.image_digest }}
                   dst: ${{ steps.meta.outputs.tags }}
 
-            - uses: softprops/action-gh-release@v0.1.14
+            - uses: softprops/action-gh-release@v0.1.15
               name: Create release
               if: startsWith(github.ref, 'refs/tags/v')
               with:
