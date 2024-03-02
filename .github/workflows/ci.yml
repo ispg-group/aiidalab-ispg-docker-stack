@@ -11,7 +11,7 @@ on:
             - main
     pull_request:
     release:
-        published:
+        types: [published]
 
 env:
     REGISTRY: ghcr.io/
@@ -47,7 +47,7 @@ jobs:
                   # https://github.com/docker/metadata-action#tags-input
                   # See the release workflow for the release tags.
                   tags: |
-                      type=ref,event=branch
+                      type=sha
                       type=ref,event=pr
 
             - name: Build image
