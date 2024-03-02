@@ -11,7 +11,7 @@ on:
             - main
     pull_request:
     release:
-        published:
+        types: [published]
 
 env:
     REGISTRY: ghcr.io/
