@@ -8,6 +8,25 @@ The following extra things are added on top of the `docker.io/aiidalab/full-stac
 
 Original image is generated and published on DockerHub at <https://github.com/aiidalab/aiidalab-docker-stack>
 
+## (dev) Releasing a new image
+
+We use bumpver to handle the release automation:
+
+```console
+pipx install bumpver
+git switch main && git pull origin main
+# Check the changes first with a dry run
+bumpver update --dry
+bumpver update
+```
+
+This will create a release commit, tag it, and push it.
+Once you see the build and tests pass, create a release for the new tag in GitHub UI at
+
+https://github.com/ispg-group/aiidalab-ispg-docker-stack/releases/new
+
+This will trigger a new workflow that should do a new build and push the new `latest` image.
+
 ## Creating your own SSL certificates for HTTPS
 
 To get a proper certificate from a trusted Certificate Authority (CA),
