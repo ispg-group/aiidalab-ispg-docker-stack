@@ -120,7 +120,7 @@ jobs:
                       type=match,pattern=v(\d{4}\.\d{2}.\d+(-.+)?),group=1
 
             - name: Release image
-              uses: akhilerm/tag-push-action@v2.1.0
+              uses: akhilerm/tag-push-action@v2.2.0
               with:
                   src: ${{ env.REGISTRY }}${{ env.ISPG_IMAGE }}@${{ needs.build.outputs.image_digest }}
                   dst: ${{ steps.meta.outputs.tags }}
