@@ -81,8 +81,8 @@ jobs:
                   ISPG_IMAGE: ${{ env.ISPG_IMAGE }}@${{ needs.build.outputs.image_digest }}
 
     release-ghcr:
-        if: github.repository_owner == 'ispg-group'
         needs: [build, test]
+        runs-on: ubuntu-22.04
         permissions:
             packages: write
             contents: write
