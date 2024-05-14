@@ -3,7 +3,7 @@
 # Publishes Docker images to Github Container Repository (ghcr.io),
 # and runs the automated tests with pytest.
 
-name: CI
+name: Docker
 
 on:
     push:
@@ -44,7 +44,7 @@ jobs:
               id: build
               uses: docker/build-push-action@v5
               with:
-                  tag: ${{ env.REGISTRY }}/${{ env.ISPG_IMAGE }}
+                  tags: ${{ env.REGISTRY }}${{ env.ISPG_IMAGE }}
                   cache-from: type=gha
                   cache-to: type=gha,mode=max
                   outputs: |
