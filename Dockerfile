@@ -1,4 +1,4 @@
-FROM aiidalab/full-stack:latest
+FROM aiidalab/full-stack:aiida-2.4.3
 LABEL maintainer="Daniel Hollas <daniel.hollas@bristol.ac.uk>"
 
 USER root
