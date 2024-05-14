@@ -49,7 +49,6 @@ jobs:
                   cache-to: type=gha,mode=max
                   outputs: |
                       type=registry,push-by-digest=true,name-canonical=true
-                      type=docker
 
     test:
         needs: build
