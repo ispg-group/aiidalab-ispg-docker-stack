@@ -53,7 +53,7 @@ jobs:
     test:
         needs: build
         runs-on: ubuntu-22.04
-        timeout-minutes: 10
+        timeout-minutes: 20
         permissions:
             packages: read
             contents: read
@@ -83,11 +83,31 @@ jobs:
     release-ghcr:
         if: github.repository_owner == 'ispg-group'
         needs: [build, test]
-        uses: ./.github/workflows/publish.yml
-        with:
-            image_digest: ${{ needs.build.outputs.image_digest}}
-            registry: ghcr.io
-        secrets: inherit
         permissions:
             packages: write
             contents: write
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Login to GitHub Container Registry 🔑
+              uses: docker/login-action@v3
+              with:
+                  registry: ghcr.io
+                  username: ${{ github.actor }}
+                  password: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Docker meta
+              id: meta
+              uses: docker/metadata-action@v5
+              with:
+                  images: ${{ env.REGISTRY }}${{ env.ISPG_IMAGE }}
+                  tags: |
+                      type=ref,event=pr
+                      type=edge,enable={{is_default_branch}}
+                      type=match,pattern=v(\d{4}\.\d{2}.\d+(-.+)?),group=1
+
+            - name: Push image
+              uses: akhilerm/tag-push-action@v2.2.0
+              with:
+                  src: ${{ env.registry }}${{ env.ISPG_IMAGE }}@${{ needs.build.outputs.image_digest }}
+                  dst: ${{ steps.meta.outputs.tags }}
