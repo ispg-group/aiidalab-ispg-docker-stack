@@ -1,0 +1,4 @@
+docker-compose~=1.29
+pytest~=7.4
+requests~=2.31
+pytest-docker~=2.0
