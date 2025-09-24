@@ -16,6 +16,7 @@ on:
 env:
     REGISTRY: ghcr.io/
     ISPG_IMAGE: ${{ github.repository_owner }}/atmospec
+    FORCE_COLOR: 1
 
 jobs:
 
