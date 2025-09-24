@@ -25,7 +25,7 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-ENV SLURM_CONF_FILE /etc/slurm/slurm.conf
+ENV SLURM_CONF_FILE=/etc/slurm/slurm.conf
 
 COPY --chown=slurm slurm/slurm.conf /opt/slurm.conf
 RUN usermod -a -G slurm ${NB_USER}
