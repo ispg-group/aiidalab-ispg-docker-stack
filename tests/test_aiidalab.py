@@ -45,3 +45,9 @@ def test_install_atmospec_from_master(aiidalab_exec, nb_user):
     assert "ERROR" not in output
     assert "dependency conflict" not in output
     assert f"Installed '{appname}' version" in output
+
+    output = aiidalab_exec(
+        "aiidalab list",
+        user=nb_user,
+    ).strip()
+    assert appname in output
