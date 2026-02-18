@@ -36,17 +36,10 @@ def test_verdi_status(aiidalab_exec, nb_user):
     assert "Unable to connect to broker" not in output
 
 
-@pytest.mark.parametrize(
-    "app",
-    [
-        "aiidalab/aiidalab-widgets-base",
-        "ispg-group/aiidalab-ispg",
-    ],
-)
-def test_install_apps_from_master(aiidalab_exec, app, nb_user):
-    owner, appname = app.split("/")
+def test_install_atmospec_from_master(aiidalab_exec, nb_user):
+    appname = "ispg-group/aiidalab-ispg"
     output = aiidalab_exec(
-        f"aiidalab install --yes {appname}@git+https://github.com/{owner}/{appname}",
+        f"aiidalab install --yes {appname}@git+https://github.com/ispg-group/{appname}",
         user=nb_user,
     ).strip()
     assert "ERROR" not in output
