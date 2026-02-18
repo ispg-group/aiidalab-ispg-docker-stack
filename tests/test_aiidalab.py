@@ -37,7 +37,7 @@ def test_verdi_status(aiidalab_exec, nb_user):
 
 
 def test_install_atmospec_from_master(aiidalab_exec, nb_user):
-    appname = "ispg-group/aiidalab-ispg"
+    appname = "aiidalab-ispg"
     output = aiidalab_exec(
         f"aiidalab install --yes {appname}@git+https://github.com/ispg-group/{appname}",
         user=nb_user,
