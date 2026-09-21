@@ -35,8 +35,9 @@ def test_verdi_status(aiidalab_exec, nb_user):
 
 def test_install_atmospec_from_master(aiidalab_exec, nb_user):
     appname = "aiidalab-ispg"
+    branch = "ipywidgets8"
     output = aiidalab_exec(
-        f"aiidalab install --yes {appname}@git+https://github.com/ispg-group/{appname}",
+        f"aiidalab install --yes {appname}@git+https://github.com/ispg-group/{appname}@{branch}",
         user=nb_user,
     ).strip()
     assert "ERROR" not in output

@@ -7,13 +7,18 @@ services:
         image: ${REGISTRY:-}${ISPG_IMAGE:-ispg-group/atmospec}${TAG:-}
         environment:
             TZ: Europe/Zurich
-            DOCKER_STACKS_JUPYTER_CMD: notebook
             SETUP_DEFAULT_AIIDA_PROFILE: 'true'
             AIIDALAB_DEFAULT_APPS: ''
         volumes:
             - aiidalab-home-pytest:/home/jovyan
         ports:
             - "0.0.0.0:${AIIDALAB_PORT:-}:8888"
+        healthcheck:
+            test: ["CMD-SHELL", "/etc/jupyter/docker_healthcheck.py || exit 1"]
+            interval: 5s
+            timeout: 5s
+            retries: 30
+            start_period: 30s
 
 volumes:
     aiidalab-home-pytest:
