@@ -1,8 +1,5 @@
-import pytest
 import requests
-import json
 import urllib3
-from packaging.version import parse
 
 
 def test_notebook_service_available(notebook_service):

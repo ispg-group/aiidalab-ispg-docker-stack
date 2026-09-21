@@ -8,7 +8,7 @@ fi
 # Auto-determine number of CPUs and RAM.
 # User can also pass these via SLURM_NCPU and SLURM_MEMORY_MB env vars.
 if [[ -z ${SLURM_NCPU-} ]];then
-  # We reserve one CPU for other processes (AiiDA daemon, jupyter, DB...) 
+  # We reserve one CPU for other processes (AiiDA daemon, jupyter, DB...)
   NUM_PHYSICAL_CORES=$(python -c 'import psutil; print(int(psutil.cpu_count(logical=False)))')
   if [[ -z ${NUM_PHYSICAL_CORES-} ]]; then
     echo "WARNING: Could not determine number of CPUs. Setting NCPU in SLURM config to 1."
