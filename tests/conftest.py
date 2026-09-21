@@ -1,11 +1,8 @@
-import json
-from pathlib import Path
-
 import pytest
 import requests
 import urllib3
+from requests.exceptions import ConnectionError
 
-from requests.exceptions import ConnectionError  # noqa: A004
 
 def is_responsive(url):
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)

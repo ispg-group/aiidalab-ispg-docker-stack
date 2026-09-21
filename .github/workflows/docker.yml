@@ -20,8 +20,17 @@ env:
 
 jobs:
 
+    pre-commit:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v7
+
+            - uses: j178/prek-action@v3.0.0
+
+
     build:
 
+        needs: pre-commit
         runs-on: ubuntu-24.04
         timeout-minutes: 20
         permissions:
