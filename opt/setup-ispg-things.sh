@@ -1,3 +1,4 @@
+#!/bin/bash
 # Here we setup a new AiiDA computer configured with SLURM.
 # Note: We defer the AiiDA ORCA code installation for the 'post_install' script
 # that is run when aiidalab-ispg app is installed.
