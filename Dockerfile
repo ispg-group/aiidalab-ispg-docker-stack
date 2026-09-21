@@ -11,6 +11,7 @@ WORKDIR /opt/
 # we install them here to speed up the installation.
 RUN mamba install --yes -c conda-forge \
      xtb-python \
+     openmpi=4.1.1 \
      && mamba clean --all -f -y && \
      fix-permissions "${CONDA_DIR}" && \
      fix-permissions "/home/${NB_USER}"
