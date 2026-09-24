@@ -4,46 +4,23 @@ LABEL maintainer="Daniel Hollas <daniel.hollas@bristol.ac.uk>"
 USER root
 WORKDIR /opt/
 
-# NOTE: We could remove the OpenMPI and xTB installations as we now can
-# install them directly during the aiidalab-ispg installation, see:
-# https://github.com/ispg-group/aiidalab-ispg/pull/221
-# but because it takes a non-trivial amount of time,
-# we install them here to speed up the installation.
-RUN mamba install --yes -c conda-forge \
-     xtb-python \
-     && mamba clean --all -f -y && \
-     fix-permissions "${CONDA_DIR}" && \
-     fix-permissions "/home/${NB_USER}"
+ARG HQ_VER=0.19.0
 
-# Install and configure SLURM
-RUN apt-get update \
-    && apt-get install --yes --no-install-recommends vim slurm-wlm \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+ARG HQ_URL_AMD64="https://github.com/It4innovations/hyperqueue/releases/download/v${HQ_VER}/hq-v${HQ_VER}-linux-x64.tar.gz"
+ARG HQ_URL_ARM64="https://github.com/It4innovations/hyperqueue/releases/download/v${HQ_VER}/hq-v${HQ_VER}-linux-arm64-linux.tar.gz"
+ARG AIIDA_HQ_PKG="aiida-hyperqueue~=0.4.0"
 
-ENV SLURM_CONF_FILE=/etc/slurm/slurm.conf
+# Download and unpack the correct hq binary for the architecture:
+RUN set -ex; \
+    if [ "${TARGETARCH}" = "arm64" ]; then \
+      wget --no-verbose -c -O hq.tar.gz "${HQ_URL_ARM64}"; \
+    else \
+      wget --no-verbose -c -O hq.tar.gz "${HQ_URL_AMD64}"; \
+    fi && \
+    tar xf hq.tar.gz -C /opt/conda/ && rm hq.tar.gz
 
-COPY --chown=slurm slurm/slurm.conf /opt/slurm.conf
-RUN usermod -a -G slurm ${NB_USER}
-RUN chmod a+r /opt/slurm.conf
+RUN python -m pip install --no-user --no-cache-dir ${AIIDA_HQ_PKG}
 
-RUN mkdir /run/munge
-RUN chown -R root /etc/munge /var/lib/munge
+COPY ./before-notebook.d/* /usr/local/bin/before-notebook.d/
 
-# Copy script to start SLURM daemons
-# NOTE: It is imperative to copy this script into the
-# start-notebook.d/ directory, where the scripts might
-# be executed by root user.
-# Scripts in before-notebook.d/ must be executed by ${NB_USER}
-# For this to work, we need to patch the start.sh script, see below.
-COPY --chown=${NB_USER}:users slurm/slurm-service.sh /usr/local/bin/start-notebook.d/10_slurm-service.sh
-# Patch the start.sh script to run hooks under NB_USER
-# even if called with root user
-COPY jupyter-start.sh /usr/local/bin/start.sh
-
-# NOTE: This script sets up the slurm computer in AiiDA DB
-# so it needs to run before 60_prepare-aiidalab.sh,
-# which installs the aiidalab-ispg, which in turn installs the orca code nodes.
-COPY opt/setup-ispg-things.sh /usr/local/bin/before-notebook.d/59_setup-ispg-things.sh
-RUN chmod a+r /usr/local/bin/before-notebook.d/59_setup-ispg-things.sh
 WORKDIR "/home/${NB_USER}/"
