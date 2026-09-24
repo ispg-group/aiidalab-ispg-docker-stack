@@ -27,6 +27,8 @@ COPY --chown=slurm slurm/slurm.conf /opt/slurm.conf
 RUN usermod -a -G slurm ${NB_USER}
 RUN chmod a+r /opt/slurm.conf
 
+RUN mkdir -p /var/spool/slurmd /var/lib/slurm/slurmctld && \
+    chown slurm:slurm /var/spool/slurmd /var/lib/slurm/slurmctld
 RUN mkdir /run/munge
 RUN chown -R root /etc/munge /var/lib/munge
 
