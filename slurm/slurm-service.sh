@@ -1,9 +1,10 @@
 #!/bin/bash
 set -eum
 
-if [[ -z ${SLURM_CONF_FILE-} ]];then
-  SLURM_CONF_FILE="/etc/slurm/slurm.conf"
+if [[ -z ${SLURM_PATH-} ]];then
+  SLURM_PATH="/etc/slurm/"
 fi
+SLURM_CONF_FILE="$SLURM_PATH/slurm.conf"
 
 # Auto-determine number of CPUs and RAM.
 # User can also pass these via SLURM_NCPU and SLURM_MEMORY_MB env vars.
@@ -32,7 +33,7 @@ echo "Using the following configuration for SLURM:"
 echo "RAM: ${SLURM_MEMORY_MB}Mb  NCPU: ${SLURM_NCPU}"
 echo "See ${SLURM_CONF_FILE} for details"
 
-cp /opt/slurm.conf $SLURM_CONF_FILE
+cp /opt/slurm.conf /opt/cgroup.conf $SLURM_PATH
 cat >> $SLURM_CONF_FILE << EOF
 NodeName=localhost RealMemory=$SLURM_MEMORY_MB ThreadsPerCore=1 Sockets=1 CoresPerSocket=$SLURM_NCPU State=UNKNOWN
 EOF
