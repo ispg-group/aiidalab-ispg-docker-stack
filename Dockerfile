@@ -10,9 +10,9 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-ENV SLURM_CONF_FILE=/etc/slurm/slurm.conf
+ENV SLURM_PATH=/etc/slurm/
 
-COPY --chown=slurm slurm/slurm.conf /opt/slurm.conf
+COPY --chown=slurm slurm/* /opt/
 RUN usermod -a -G slurm ${NB_USER}
 RUN chmod a+r /opt/slurm.conf
 
