@@ -8,7 +8,7 @@ ARG HQ_VER=0.19.0
 
 ARG HQ_URL_AMD64="https://github.com/It4innovations/hyperqueue/releases/download/v${HQ_VER}/hq-v${HQ_VER}-linux-x64.tar.gz"
 ARG HQ_URL_ARM64="https://github.com/It4innovations/hyperqueue/releases/download/v${HQ_VER}/hq-v${HQ_VER}-linux-arm64-linux.tar.gz"
-ARG AIIDA_HQ_PKG="aiida-hyperqueue~=0.3.0"
+ARG AIIDA_HQ_PKG="aiida-hyperqueue~=0.4.0"
 
 # Download and unpack the correct hq binary for the architecture:
 RUN set -ex; \
