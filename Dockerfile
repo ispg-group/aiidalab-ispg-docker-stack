@@ -1,3 +1,12 @@
+FROM ubuntu:24.04 AS slurm-build
+ARG SLURM_VERSION=24.11.5
+RUN apt-get update && apt-get install -y build-essential fakeroot devscripts equivs curl
+RUN curl -fsSL https://download.schedmd.com/slurm/slurm-${SLURM_VERSION}.tar.bz2 | tar xj
+WORKDIR /slurm-${SLURM_VERSION}
+RUN mk-build-deps -i -t 'apt-get -y' debian/control && debuild -b -uc -us
+
+FROM ubuntu:24.04
+
 FROM aiidalab/full-stack:edge
 LABEL maintainer="Daniel Hollas <daniel.hollas@bristol.ac.uk>"
 
@@ -5,19 +14,30 @@ USER root
 WORKDIR /opt/
 
 # Install and configure SLURM
-RUN apt-get update \
-    && apt-get install --yes --no-install-recommends vim slurm-wlm \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+RUN groupadd --system slurm && \
+    useradd --system --gid slurm --no-create-home \
+            --home-dir /var/lib/slurm --shell /usr/sbin/nologin slurm
+
+RUN mkdir -p /var/spool/slurmd /var/lib/slurm/slurmctld /var/log/slurm && \
+    chown -R slurm:slurm /var/spool/slurmd /var/lib/slurm /var/log/slurm
+
+COPY --from=slurm-build /*.deb /tmp/debs/
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    vim munge \
+    /tmp/debs/slurm-smd_*.deb \
+    /tmp/debs/slurm-smd-slurmctld_*.deb /tmp/debs/slurm-smd-slurmd_*.deb \
+    /tmp/debs/slurm-smd-client_*.deb && \
+    rm -rf /tmp/debs && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# This should silence MPI/PMIX plugin errors at slurmd/slurmctld startup
+RUN rm -f /usr/lib/x86_64-linux-gnu/slurm/mpi_pmix*.so
 
 ENV SLURM_PATH=/etc/slurm/
 
 COPY --chown=slurm slurm/* /opt/
 RUN usermod -a -G slurm ${NB_USER}
-RUN chmod a+r /opt/slurm.conf
+RUN chmod a+r /opt/*.conf
 
-RUN mkdir -p /var/spool/slurmd /var/lib/slurm/slurmctld && \
-    chown slurm:slurm /var/spool/slurmd /var/lib/slurm/slurmctld
 RUN mkdir /run/munge
 RUN chown -R root /etc/munge /var/lib/munge
 
